@@ -70,4 +70,26 @@ class ProjectTestCase extends \PHPUnit_Framework_TestCase
             rmdir($dir);
         }
     }
+
+    protected function normalizePath($path)
+    {
+        return strtr(DIRECTORY_SEPARATOR, '/', $path);
+    }
+
+    protected function assertSamePath($expected, $input, $msg = null)
+    {
+        $this->assertSame(
+            $this->normalizePath($expected),
+            $this->normalizePath($input),
+            $msg
+        );
+    }
+
+    protected function assertSamePaths(array $expected, array $input, $msg = null)
+    {
+        $expected = array_map(function ($path) { return $this->normalizePath($path); }, $expected);
+        $input = array_map(function ($path) { return $this->normalizePath($path); }, $input);
+
+        $this->assertSame($expected, $input, $msg);
+    }
 }
